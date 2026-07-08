@@ -4,6 +4,7 @@ import { grootboekrekeningen, relaties, transacties } from "@/db/schema";
 import type { Richting } from "@/db/schema";
 import { getActiefBoekjaar } from "@/lib/boekjaar";
 import { DEFAULT_GROOTBOEK_CODE } from "@/lib/schemas/transactie";
+import { ExportKnoppen } from "@/components/export-knoppen";
 import {
   TransactieRegister,
   type GrootboekOptie,
@@ -106,7 +107,14 @@ export async function RegisterPagina({
 
   return (
     <div className="space-y-6">
-      {kop}
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        {kop}
+        <ExportKnoppen
+          report="transacties"
+          jaar={boekjaar.jaar}
+          richting={richting}
+        />
+      </div>
       <TransactieRegister
         richting={richting}
         boekjaarJaar={boekjaar.jaar}

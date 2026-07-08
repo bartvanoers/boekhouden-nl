@@ -3,6 +3,7 @@ import { getActiefBoekjaar } from "@/lib/boekjaar";
 import { berekenBtw, type BtwPeriodeRegel } from "@/lib/reports/btw";
 import { BTW_PERIODE_LABELS } from "@/lib/schemas/instellingen";
 import { formatEuro } from "@/lib/money";
+import { ExportKnoppen } from "@/components/export-knoppen";
 import {
   Card,
   CardContent,
@@ -88,7 +89,10 @@ export default async function BtwPage() {
 
   return (
     <div className="space-y-6">
-      {kop}
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        {kop}
+        <ExportKnoppen report="btw" jaar={boekjaar.jaar} />
+      </div>
       <Card>
         <CardHeader>
           <CardTitle className="text-base font-medium">

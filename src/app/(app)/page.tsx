@@ -3,6 +3,7 @@ import { db } from "@/db";
 import { getActiefBoekjaar } from "@/lib/boekjaar";
 import { berekenDashboard, type RichtingTotaal } from "@/lib/reports/dashboard";
 import { formatEuro } from "@/lib/money";
+import { ExportKnoppen } from "@/components/export-knoppen";
 import {
   Card,
   CardContent,
@@ -112,10 +113,17 @@ export default async function DashboardPage() {
         {/* Winst & Verlies */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-base font-medium">
-              Winst &amp; Verlies
-            </CardTitle>
-            <CardDescription>Opbrengsten en kosten dit boekjaar.</CardDescription>
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <CardTitle className="text-base font-medium">
+                  Winst &amp; Verlies
+                </CardTitle>
+                <CardDescription>
+                  Opbrengsten en kosten dit boekjaar.
+                </CardDescription>
+              </div>
+              <ExportKnoppen report="wv" jaar={boekjaar.jaar} />
+            </div>
           </CardHeader>
           <CardContent>
             <Table>
@@ -164,12 +172,17 @@ export default async function DashboardPage() {
         {/* Balans */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-base font-medium">Balans</CardTitle>
-            <CardDescription>
-              {balans.sluit
-                ? "Activa is gelijk aan passiva."
-                : "Let op: de balans sluit niet."}
-            </CardDescription>
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <CardTitle className="text-base font-medium">Balans</CardTitle>
+                <CardDescription>
+                  {balans.sluit
+                    ? "Activa is gelijk aan passiva."
+                    : "Let op: de balans sluit niet."}
+                </CardDescription>
+              </div>
+              <ExportKnoppen report="balans" jaar={boekjaar.jaar} />
+            </div>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 gap-6 text-sm">
