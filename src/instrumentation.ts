@@ -1,17 +1,12 @@
 /**
  * Next.js instrumentation hook: draait één keer bij het opstarten van de
- * server. We voeren hier migrate-on-boot uit, gevolgd door een idempotente
- * seed. Alleen in de Node.js-runtime (niet in de edge-runtime).
+ * server. De daadwerkelijke migrate-on-boot + seed staan in een apart
+ * node-only bestand dat we uitsluitend in de Node.js-runtime dynamisch
+ * importeren. Zo blijft de native module `better-sqlite3` buiten de
+ * edge-bundle (die o.a. voor de middleware wordt gecompileerd).
  */
 export async function register() {
-  if (process.env.NEXT_RUNTIME !== "nodejs") {
-    return;
+  if (process.env.NEXT_RUNTIME === "nodejs") {
+    await import("./instrumentation-node");
   }
-
-  const { db } = await import("./db");
-  const { runMigrations } = await import("./db/migrate");
-  const { runSeed } = await import("./db/seed");
-
-  runMigrations(db);
-  runSeed(db);
 }

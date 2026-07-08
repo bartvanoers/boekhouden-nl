@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { AppNav, type NavItem } from "@/components/app-nav";
+import { LogoutButton } from "@/components/logout-button";
 
 const NAV_ITEMS: NavItem[] = [
   { href: "/", label: "Dashboard" },
@@ -27,6 +28,9 @@ export default function AppLayout({
           <p className="text-xs text-muted-foreground">Administratie</p>
         </div>
         <AppNav items={NAV_ITEMS} />
+        <div className="mt-auto pt-6">
+          <LogoutButton />
+        </div>
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
