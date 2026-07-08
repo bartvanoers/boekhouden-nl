@@ -1,0 +1,34 @@
+# Build-context zo klein mogelijk houden: node_modules en build-output worden
+# in het image opnieuw gegenereerd, de data-map en git-historie horen er niet in.
+node_modules
+.next
+out
+build
+coverage
+
+# Data en secrets
+data
+.env
+.env.*
+!.env.example
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+
+# Git en editor
+.git
+.gitignore
+.DS_Store
+*.pem
+
+# Docker zelf
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*

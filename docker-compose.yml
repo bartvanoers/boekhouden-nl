@@ -1,0 +1,26 @@
+services:
+  app:
+    build: .
+    image: boekhouden
+    container_name: boekhouden
+    # Alleen op de loopback publiceren; TLS/exposure regelt de reverse proxy.
+    ports:
+      - "127.0.0.1:3000:3000"
+    volumes:
+      # Persistente SQLite-database (overleeft `docker compose down`).
+      - ./data:/data
+    environment:
+      # Verplichte sessiesleutel; komt uit .env (minstens 32 tekens).
+      - SESSION_SECRET=${SESSION_SECRET}
+      # Optioneel: vast wachtwoord-hash-override (reset-mechanisme).
+      - AUTH_PASSWORD_HASH=${AUTH_PASSWORD_HASH:-}
+      - DATABASE_PATH=/data/boekhouden.db
+    restart: unless-stopped
+    healthcheck:
+      # Alpine bevat busybox-wget; --spider doet een GET zonder body op te slaan.
+      test:
+        ["CMD-SHELL", "wget -q --spider http://127.0.0.1:3000/api/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
