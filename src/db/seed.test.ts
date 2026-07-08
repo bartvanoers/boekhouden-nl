@@ -53,13 +53,49 @@ describe("migrate + seed", () => {
   it("vult het grootboek en een boekjaar", () => {
     runSeed(db, { jaar: 2026 });
 
-    expect(tel(sqlite, "grootboekrekeningen")).toBe(STANDAARD_GROOTBOEK.length);
+    // 16 balans-/systeemrekeningen + 21 W&V-rekeningen uit de Excel-template.
+    expect(STANDAARD_GROOTBOEK.length).toBe(37);
+    expect(tel(sqlite, "grootboekrekeningen")).toBe(37);
     expect(tel(sqlite, "boekjaren")).toBe(1);
 
     const boekjaar = db.select().from(schema.boekjaren).get();
     expect(boekjaar?.jaar).toBe(2026);
     expect(boekjaar?.btwPeriode).toBe("kwartaal");
     expect(boekjaar?.status).toBe("open");
+  });
+
+  it("bevat de kostenrekeningen uit de Excel-template", () => {
+    runSeed(db, { jaar: 2026 });
+    const rows = sqlite
+      .prepare(
+        "SELECT code, naam, type FROM grootboekrekeningen WHERE code >= '4500' ORDER BY code",
+      )
+      .all() as { code: string; naam: string; type: string }[];
+
+    expect(rows.map((r) => [r.code, r.naam])).toEqual([
+      ["4500", "Contributies en abonnementen"],
+      ["4510", "Reclame en advertenties"],
+      ["4520", "Representatie en verteer"],
+      ["4530", "Reis- en verblijfkosten"],
+      ["4540", "Relatiegeschenken"],
+      ["4545", "Verzekeringen"],
+      ["4550", "Bankkosten"],
+      ["4590", "Overige verkoopkosten"],
+      ["4600", "Kilometervergoeding"],
+      ["4700", "Kantoorbenodigdheden"],
+      ["4740", "Drukwerk, porti en vrachten"],
+      ["4750", "Telefoon en internet"],
+      ["4790", "Overige kantoorkosten"],
+      ["4810", "Accountants- en administratiekosten"],
+      ["4850", "Cursussen/seminars"],
+      ["4860", "Vakliteratuur"],
+      ["4900", "Betalingsverschillen"],
+      ["4950", "Oninbare vorderingen"],
+      ["7000", "Inkopen"],
+      ["8000", "Omzet NL"],
+      ["8010", "Omzet EU"],
+    ]);
+    expect(rows.every((r) => r.type === "winst_verlies")).toBe(true);
   });
 
   it("markeert de juiste systeemrekeningen", () => {
