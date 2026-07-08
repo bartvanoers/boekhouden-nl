@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { getIronSession } from "iron-session";
-import { sessionOptions, type SessionData } from "@/lib/auth/session";
+import { getSessionOptions, type SessionData } from "@/lib/auth/session";
 
 /**
  * Middleware: alles vereist een sessie behalve de publieke routes hieronder en
@@ -24,7 +24,11 @@ export async function middleware(req: NextRequest) {
   }
 
   const res = NextResponse.next();
-  const session = await getIronSession<SessionData>(req, res, sessionOptions);
+  const session = await getIronSession<SessionData>(
+    req,
+    res,
+    getSessionOptions(),
+  );
 
   if (!session.loggedIn) {
     const url = req.nextUrl.clone();

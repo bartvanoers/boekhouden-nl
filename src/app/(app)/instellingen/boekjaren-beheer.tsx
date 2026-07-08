@@ -37,6 +37,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { maakBoekjaar, wijzigBtwPeriode } from "@/actions/boekjaren";
+import { heropenBoekjaar, sluitBoekjaar } from "@/actions/jaarafsluiting";
 import {
   BTW_PERIODES,
   BTW_PERIODE_LABELS,
@@ -57,6 +58,10 @@ export function BoekjarenBeheer({
   const [nieuwPeriode, setNieuwPeriode] = useState<BtwPeriode>(standaardPeriode);
   const [error, setError] = useState<string | null>(null);
   const [rijError, setRijError] = useState<string | null>(null);
+  const [bevestig, setBevestig] = useState<
+    | { modus: "afsluiten" | "heropenen"; boekjaar: Boekjaar }
+    | null
+  >(null);
   const [pending, start] = useTransition();
 
   function onNieuw(e: React.FormEvent<HTMLFormElement>) {
@@ -90,6 +95,26 @@ export function BoekjarenBeheer({
     });
   }
 
+  function bevestigActie() {
+    if (!bevestig) return;
+    const id = bevestig.boekjaar.id;
+    const actie = bevestig.modus;
+    setRijError(null);
+    start(async () => {
+      const res =
+        actie === "afsluiten"
+          ? await sluitBoekjaar(id)
+          : await heropenBoekjaar(id);
+      if (res.ok) {
+        setBevestig(null);
+        router.refresh();
+      } else {
+        setRijError(res.error ?? "Er ging iets mis.");
+        setBevestig(null);
+      }
+    });
+  }
+
   return (
     <Card>
       <CardHeader>
@@ -119,6 +144,7 @@ export function BoekjarenBeheer({
                 <TableHead className="w-24">Jaar</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Btw-periode</TableHead>
+                <TableHead className="text-right">Jaarafsluiting</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -154,6 +180,31 @@ export function BoekjarenBeheer({
                       <span className="text-muted-foreground">
                         {BTW_PERIODE_LABELS[b.btwPeriode]}
                       </span>
+                    )}
+                  </TableCell>
+                  <TableCell className="text-right whitespace-nowrap">
+                    {b.status === "open" ? (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        disabled={pending}
+                        onClick={() =>
+                          setBevestig({ modus: "afsluiten", boekjaar: b })
+                        }
+                      >
+                        Afsluiten
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        disabled={pending}
+                        onClick={() =>
+                          setBevestig({ modus: "heropenen", boekjaar: b })
+                        }
+                      >
+                        Heropenen
+                      </Button>
                     )}
                   </TableCell>
                 </TableRow>
@@ -230,6 +281,46 @@ export function BoekjarenBeheer({
               </Button>
             </DialogFooter>
           </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Afsluiten / heropenen bevestigen */}
+      <Dialog
+        open={bevestig !== null}
+        onOpenChange={(o) => (!o ? setBevestig(null) : undefined)}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              {bevestig?.modus === "afsluiten"
+                ? `Boekjaar ${bevestig?.boekjaar.jaar} afsluiten`
+                : `Boekjaar ${bevestig?.boekjaar.jaar} heropenen`}
+            </DialogTitle>
+            <DialogDescription>
+              {bevestig?.modus === "afsluiten"
+                ? `De eindbalans wordt berekend en overgedragen als beginbalans van ${
+                    (bevestig?.boekjaar.jaar ?? 0) + 1
+                  }, waarbij het resultaat in Beginkapitaal vloeit. Boekjaar ${bevestig?.boekjaar.jaar} wordt daarna alleen-lezen.`
+                : `Boekjaar ${bevestig?.boekjaar.jaar} wordt weer bewerkbaar. Controleer daarna of de overdracht naar het volgende jaar nog klopt.`}
+            </DialogDescription>
+          </DialogHeader>
+
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setBevestig(null)}
+            >
+              Annuleren
+            </Button>
+            <Button type="button" disabled={pending} onClick={bevestigActie}>
+              {pending
+                ? "Bezig…"
+                : bevestig?.modus === "afsluiten"
+                  ? "Afsluiten"
+                  : "Heropenen"}
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </Card>

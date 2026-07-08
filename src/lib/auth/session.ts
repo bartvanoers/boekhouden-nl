@@ -49,16 +49,25 @@ function resolveSecret(): string {
   return DEV_FALLBACK_SECRET;
 }
 
-export const sessionOptions: SessionOptions = {
-  password: resolveSecret(),
-  cookieName: SESSION_COOKIE,
-  cookieOptions: {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-  },
-};
+/**
+ * Bouwt de iron-session-opties. De sessiesleutel wordt hier **lazy** opgelost:
+ * pas wanneer daadwerkelijk een sessie gelezen/geschreven wordt, niet al bij
+ * het importeren van deze module. Zo faalt `next build` (dat met
+ * `NODE_ENV=production` draait maar geen `SESSION_SECRET` nodig heeft voor het
+ * verzamelen van pagina-data) niet op een ontbrekende sleutel.
+ */
+export function getSessionOptions(): SessionOptions {
+  return {
+    password: resolveSecret(),
+    cookieName: SESSION_COOKIE,
+    cookieOptions: {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+    },
+  };
+}
 
 /**
  * Leest de sessie uit de request-cookies. Bruikbaar in server actions, RSC en
@@ -67,7 +76,7 @@ export const sessionOptions: SessionOptions = {
 export async function getSession() {
   const { cookies } = await import("next/headers");
   const cookieStore = await cookies();
-  return getIronSession<SessionData>(cookieStore, sessionOptions);
+  return getIronSession<SessionData>(cookieStore, getSessionOptions());
 }
 
 /**
