@@ -22,6 +22,8 @@ const NAV_ITEMS: NavItem[] = [
   { href: "/instellingen", label: "Instellingen" },
 ];
 
+const OVER_NAV_ITEMS: NavItem[] = [{ href: "/over", label: "Over" }];
+
 export default async function AppLayout({
   children,
 }: {
@@ -51,6 +53,7 @@ export default async function AppLayout({
         </div>
         <AppNav items={NAV_ITEMS} />
         <div className="mt-auto pt-6">
+          <AppNav items={OVER_NAV_ITEMS} />
           <LogoutButton />
         </div>
       </aside>
