@@ -1,7 +1,10 @@
-# Boekhouden
+<p align="center"><img src="public/logo.png" width="140" alt="Logo"></p>
 
-Een simpele self-hosted webapplicatie voor de eigen boekhouding. Eén administratie met meerdere boekjaren. Draait als één Docker-container met een SQLite-database op
-een volume.
+<h1 align="center">Boekhouden</h1>
+
+<p align="center">Een simpele self-hosted webapplicatie voor de eigen boekhouding. Eén administratie met meerdere boekjaren. Draait als één Docker-container met een SQLite-database op een volume.</p>
+
+<p align="center"><a href="https://ko-fi.com/bartvanoers"><img src="https://img.shields.io/badge/Ko--fi-Steun%20dit%20project-ff5e5b?logo=kofi&logoColor=white" alt="Ko-fi"></a></p>
 
 **Buiten scope:** facturen maken, Excel-import, meerdere gebruikers of administraties, bankkoppelingen.
 

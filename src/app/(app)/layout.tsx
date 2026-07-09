@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { AppNav, type NavItem } from "@/components/app-nav";
 import { BoekjaarSwitcher } from "@/components/boekjaar-switcher";
@@ -37,13 +38,20 @@ export default async function AppLayout({
     <div className="flex min-h-screen">
       <aside className="hidden w-60 shrink-0 flex-col border-r bg-card px-3 py-5 md:flex">
         <div className="px-3 pb-6">
-          <Link
-            href="/"
-            className="line-clamp-2 text-lg font-semibold tracking-tight"
-          >
-            {bedrijfsnaam}
+          <Link href="/" className="flex items-center gap-2.5">
+            <Image
+              src="/logo.png"
+              alt="Logo"
+              width={578}
+              height={649}
+              priority
+              className="h-8 w-auto shrink-0"
+            />
+            <span className="line-clamp-2 text-lg font-semibold tracking-tight">
+              {bedrijfsnaam}
+            </span>
           </Link>
-          <p className="text-xs text-muted-foreground">Administratie</p>
+          <p className="mt-1 text-xs text-muted-foreground">Administratie</p>
         </div>
         <div className="px-1 pb-4">
           <BoekjaarSwitcher
@@ -60,8 +68,17 @@ export default async function AppLayout({
 
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="flex h-14 items-center justify-between gap-3 border-b bg-card px-6 md:hidden">
-          <Link href="/" className="line-clamp-1 text-base font-semibold">
-            {bedrijfsnaam}
+          <Link href="/" className="flex items-center gap-2.5">
+            <Image
+              src="/logo.png"
+              alt="Logo"
+              width={578}
+              height={649}
+              className="h-7 w-auto shrink-0"
+            />
+            <span className="line-clamp-1 text-base font-semibold">
+              {bedrijfsnaam}
+            </span>
           </Link>
         </header>
 

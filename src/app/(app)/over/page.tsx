@@ -61,7 +61,7 @@ export default function OverPage() {
         <CardContent>
           <Button asChild>
             <a
-              href="https://ko-fi.com/bartvanoers/tip"
+              href="https://ko-fi.com/bartvanoers"
               target="_blank"
               rel="noopener noreferrer"
             >
