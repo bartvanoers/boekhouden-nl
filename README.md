@@ -541,3 +541,10 @@ berekende verwachtingen, o.a.:
 
 Omdat de rapportages pure functies zijn die tegen een echte (in-memory) SQLite
 draaien, testen deze cases de volledige rekenketen zonder de UI of het netwerk.
+
+## Licentie
+
+Dit project is beschikbaar onder de [GNU Affero General Public License v3.0](LICENSE)
+(AGPL-3.0). Je mag de software vrij gebruiken, aanpassen en verspreiden; bied je
+een aangepaste versie aan als (online) dienst, dan moet je de broncode van die
+versie onder dezelfde licentie beschikbaar stellen.
