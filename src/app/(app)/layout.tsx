@@ -1,8 +1,21 @@
+import {
+  BookOpen,
+  Info,
+  LayoutDashboard,
+  Percent,
+  Scale,
+  Settings,
+  ShoppingCart,
+  TrendingUp,
+  Users,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import pkg from "../../../package.json";
 import { AppNav, type NavItem } from "@/components/app-nav";
 import { BoekjaarSwitcher } from "@/components/boekjaar-switcher";
 import { LogoutButton } from "@/components/logout-button";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { db } from "@/db";
 import { boekjaren } from "@/db/schema";
 import { getActiefBoekjaar } from "@/lib/boekjaar";
@@ -13,17 +26,19 @@ import { getBedrijfsnaam } from "@/lib/settings";
 export const dynamic = "force-dynamic";
 
 const NAV_ITEMS: NavItem[] = [
-  { href: "/", label: "Dashboard" },
-  { href: "/verkopen", label: "Verkopen" },
-  { href: "/inkopen", label: "Inkopen" },
-  { href: "/relaties", label: "Relaties" },
-  { href: "/grootboek", label: "Grootboek" },
-  { href: "/beginbalans", label: "Beginbalans" },
-  { href: "/btw", label: "BTW" },
-  { href: "/instellingen", label: "Instellingen" },
+  { href: "/", label: "Dashboard", icon: <LayoutDashboard /> },
+  { href: "/verkopen", label: "Verkopen", icon: <TrendingUp /> },
+  { href: "/inkopen", label: "Inkopen", icon: <ShoppingCart /> },
+  { href: "/relaties", label: "Relaties", icon: <Users /> },
+  { href: "/grootboek", label: "Grootboek", icon: <BookOpen /> },
+  { href: "/beginbalans", label: "Beginbalans", icon: <Scale /> },
+  { href: "/btw", label: "BTW", icon: <Percent /> },
+  { href: "/instellingen", label: "Instellingen", icon: <Settings /> },
 ];
 
-const OVER_NAV_ITEMS: NavItem[] = [{ href: "/over", label: "Over" }];
+const OVER_NAV_ITEMS: NavItem[] = [
+  { href: "/over", label: "Over", icon: <Info /> },
+];
 
 export default async function AppLayout({
   children,
@@ -36,7 +51,7 @@ export default async function AppLayout({
 
   return (
     <div className="flex min-h-screen">
-      <aside className="hidden w-60 shrink-0 flex-col border-r bg-card px-3 py-5 md:flex">
+      <aside className="sticky top-0 hidden h-dvh w-60 shrink-0 flex-col overflow-y-auto border-r bg-card px-3 py-5 md:flex">
         <div className="px-3 pb-6">
           <Link href="/" className="flex items-center gap-2.5">
             <Image
@@ -63,6 +78,9 @@ export default async function AppLayout({
         <div className="mt-auto pt-6">
           <AppNav items={OVER_NAV_ITEMS} />
           <LogoutButton />
+          <p className="px-3 pt-3 text-xs text-muted-foreground/70">
+            v{pkg.version}
+          </p>
         </div>
       </aside>
 
@@ -80,7 +98,12 @@ export default async function AppLayout({
               {bedrijfsnaam}
             </span>
           </Link>
+          <ThemeToggle />
         </header>
+
+        <div className="sticky top-0 z-20 hidden justify-end border-b bg-background/85 px-6 py-3 backdrop-blur-sm md:flex">
+          <ThemeToggle />
+        </div>
 
         {actief?.status === "gesloten" ? (
           <div
@@ -92,7 +115,7 @@ export default async function AppLayout({
         ) : null}
 
         <main className="flex-1 px-6 py-8">
-          <div className="mx-auto w-full max-w-5xl">{children}</div>
+          <div className="mx-auto w-full max-w-[100rem]">{children}</div>
         </main>
       </div>
     </div>
