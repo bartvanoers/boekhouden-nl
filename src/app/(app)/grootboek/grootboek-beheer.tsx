@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { RijActies } from "@/components/rij-acties";
 import {
   Select,
   SelectContent,
@@ -166,35 +167,29 @@ export function GrootboekBeheer({
                   )}
                 </TableCell>
                 <TableCell className="text-right whitespace-nowrap">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => openBewerk(r)}
-                  >
-                    Bewerken
-                  </Button>
-                  {!r.isSysteem ? (
-                    <>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        disabled={pending}
-                        onClick={() => toggleActief(r)}
-                      >
-                        {r.actief ? "Deactiveren" : "Heractiveren"}
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-destructive"
-                        onClick={() =>
-                          setDialog({ modus: "verwijder", rekening: r })
-                        }
-                      >
-                        Verwijderen
-                      </Button>
-                    </>
-                  ) : null}
+                  <RijActies
+                    acties={[
+                      {
+                        label: "Bewerken",
+                        onSelect: () => openBewerk(r),
+                      },
+                      ...(r.isSysteem
+                        ? []
+                        : [
+                            {
+                              label: r.actief ? "Deactiveren" : "Heractiveren",
+                              disabled: pending,
+                              onSelect: () => toggleActief(r),
+                            },
+                            {
+                              label: "Verwijderen",
+                              destructief: true,
+                              onSelect: () =>
+                                setDialog({ modus: "verwijder", rekening: r }),
+                            },
+                          ]),
+                    ]}
+                  />
                 </TableCell>
               </TableRow>
             ))}

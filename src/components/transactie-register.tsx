@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { RijActies } from "@/components/rij-acties";
 import {
   Select,
   SelectContent,
@@ -317,29 +318,26 @@ export function TransactieRegister({
                     {r.grootboekNaam ?? "—"}
                   </TableCell>
                   <TableCell className="text-right whitespace-nowrap">
-                    <Button
-                      variant="ghost"
-                      size="sm"
+                    <RijActies
                       disabled={gesloten}
-                      onClick={() => {
-                        setError(null);
-                        setDialog({ modus: "bewerk", rij: r });
-                      }}
-                    >
-                      Bewerken
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="text-destructive"
-                      disabled={gesloten}
-                      onClick={() => {
-                        setError(null);
-                        setDialog({ modus: "verwijder", rij: r });
-                      }}
-                    >
-                      Verwijderen
-                    </Button>
+                      acties={[
+                        {
+                          label: "Bewerken",
+                          onSelect: () => {
+                            setError(null);
+                            setDialog({ modus: "bewerk", rij: r });
+                          },
+                        },
+                        {
+                          label: "Verwijderen",
+                          destructief: true,
+                          onSelect: () => {
+                            setError(null);
+                            setDialog({ modus: "verwijder", rij: r });
+                          },
+                        },
+                      ]}
+                    />
                   </TableCell>
                 </TableRow>
               ))

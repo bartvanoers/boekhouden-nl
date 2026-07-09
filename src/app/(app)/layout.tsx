@@ -15,6 +15,7 @@ import pkg from "../../../package.json";
 import { AppNav, type NavItem } from "@/components/app-nav";
 import { BoekjaarSwitcher } from "@/components/boekjaar-switcher";
 import { LogoutButton } from "@/components/logout-button";
+import { MobileNav } from "@/components/mobile-nav";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { db } from "@/db";
 import { boekjaren } from "@/db/schema";
@@ -85,19 +86,35 @@ export default async function AppLayout({
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex h-14 items-center justify-between gap-3 border-b bg-card px-6 md:hidden">
-          <Link href="/" className="flex items-center gap-2.5">
-            <Image
-              src="/logo.png"
-              alt="Logo"
-              width={578}
-              height={649}
-              className="h-7 w-auto shrink-0"
-            />
-            <span className="line-clamp-1 text-base font-semibold">
-              {bedrijfsnaam}
-            </span>
-          </Link>
+        <header className="flex h-14 items-center justify-between gap-3 border-b bg-card px-4 md:hidden">
+          <div className="flex items-center gap-2">
+            <MobileNav
+              items={NAV_ITEMS}
+              overItems={OVER_NAV_ITEMS}
+              bedrijfsnaam={bedrijfsnaam}
+              version={pkg.version}
+              boekjaarSwitcher={
+                <BoekjaarSwitcher
+                  boekjaren={alleBoekjaren}
+                  actiefId={actief?.id ?? null}
+                />
+              }
+            >
+              <LogoutButton />
+            </MobileNav>
+            <Link href="/" className="flex items-center gap-2.5">
+              <Image
+                src="/logo.png"
+                alt="Logo"
+                width={578}
+                height={649}
+                className="h-7 w-auto shrink-0"
+              />
+              <span className="line-clamp-1 text-base font-semibold">
+                {bedrijfsnaam}
+              </span>
+            </Link>
+          </div>
           <ThemeToggle />
         </header>
 

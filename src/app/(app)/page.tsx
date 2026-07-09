@@ -186,9 +186,9 @@ export default async function DashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 gap-6 text-sm">
-              <div>
+              <div className="flex flex-col">
                 <p className="mb-1 font-medium">Activa</p>
-                <dl className="space-y-1">
+                <dl className="flex flex-1 flex-col gap-1">
                   {balans.activa.map((r) => (
                     <div key={r.code} className="flex justify-between gap-2">
                       <dt className="text-muted-foreground">{r.naam}</dt>
@@ -197,7 +197,7 @@ export default async function DashboardPage() {
                       </dd>
                     </div>
                   ))}
-                  <div className="flex justify-between gap-2 border-t pt-1 font-semibold">
+                  <div className="mt-auto flex justify-between gap-2 border-t pt-1 font-semibold">
                     <dt>Totaal</dt>
                     <dd>
                       <Bedrag cents={balans.activaTotaalCents} sterk />
@@ -205,9 +205,9 @@ export default async function DashboardPage() {
                   </div>
                 </dl>
               </div>
-              <div>
+              <div className="flex flex-col">
                 <p className="mb-1 font-medium">Passiva</p>
-                <dl className="space-y-1">
+                <dl className="flex flex-1 flex-col gap-1">
                   {balans.passiva.map((r) => (
                     <div key={r.code} className="flex justify-between gap-2">
                       <dt className="text-muted-foreground">{r.naam}</dt>
@@ -224,7 +224,7 @@ export default async function DashboardPage() {
                       <Bedrag cents={balans.resultaatCents} />
                     </dd>
                   </div>
-                  <div className="flex justify-between gap-2 border-t pt-1 font-semibold">
+                  <div className="mt-auto flex justify-between gap-2 border-t pt-1 font-semibold">
                     <dt>Totaal</dt>
                     <dd>
                       <Bedrag cents={balans.passivaTotaalCents} sterk />

@@ -9,7 +9,7 @@ export function LogoutButton() {
       <Button
         type="submit"
         variant="ghost"
-        className="w-full justify-start gap-2.5 font-medium text-muted-foreground hover:text-foreground"
+        className="h-auto w-full justify-start gap-2.5 rounded-md border-0 px-3 py-2 font-medium text-muted-foreground hover:text-foreground"
       >
         <LogOut aria-hidden className="size-[18px] shrink-0" />
         Uitloggen
