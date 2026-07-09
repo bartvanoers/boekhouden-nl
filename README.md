@@ -1,12 +1,9 @@
 # Boekhouden
 
-Een self-hosted webapplicatie voor de eigen boekhouding — de opvolger van de
-Excel-template van boekhouden.nl. Eén administratie, meerdere boekjaren,
-enkelvoudige login. Draait als één Docker-container met een SQLite-database op
+Een simpele self-hosted webapplicatie voor de eigen boekhouding. Eén administratie met meerdere boekjaren. Draait als één Docker-container met een SQLite-database op
 een volume.
 
-**Buiten scope:** facturen maken, Excel-import, e-Boekhouden-export, meerdere
-gebruikers of administraties, bankkoppelingen.
+**Buiten scope:** facturen maken, Excel-import, meerdere gebruikers of administraties, bankkoppelingen.
 
 ## Functionaliteit
 
